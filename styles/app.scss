@@ -1,0 +1,42 @@
+@use 'modules/breakpoints';
+
+:root {
+  --breakpoint-value-mobile: #{breakpoints.$mobile};
+
+  font-size: 1rem;
+  line-height: 1.5;
+
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+
+strong {
+  font-weight: 600 !important;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/*
+ * CSS Resets
+ * -----------------------------------------------
+ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  font: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  vertical-align: baseline;
+
+  border: 0;
+}

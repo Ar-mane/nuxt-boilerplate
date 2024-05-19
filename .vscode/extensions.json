@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "Vue.vscode-typescript-vue-plugin",
+    "Syler.sass-indented",
+    "unifiedjs.vscode-mdx",
+    "EditorConfig.EditorConfig",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint"
+  ]
+}

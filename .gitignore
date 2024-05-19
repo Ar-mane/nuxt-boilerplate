@@ -1,0 +1,71 @@
+# IDE / Editor
+.idea/*
+# Specifies the project code style and formatting rules based on the current Prettier configuration
+!.idea/codeStyles
+# Adds template files in the `Right Click > New` section
+!.idea/fileTemplates
+!.idea/file.template.settings.xml
+# Disables inspections triggered by SCSS auto-import
+!.idea/inspectionProfiles
+# Enables ESLint auto-fix on save
+!.idea/jsLinters
+# Enables Stylelint for .scss and .vue files
+!.idea/stylesheetLinters
+# Name and icon for the project
+!.idea/.name
+!.idea/icon.png
+!.idea/misc.xml
+# Specifies required plugins and IDE version for the project
+!.idea/externalDependencies.xml
+# Specifies excluded folders
+!.idea/front-mv.iml
+!.idea/modules.xml
+# Enables Prettier auto-format on save
+!.idea/prettier.xml
+# Enables Stylelint auto-fix on save
+!.idea/watcherTasks.xml
+.vscode/*
+!.vscode/settings.json
+# Specifies required plugins for the project
+!.vscode/extensions.json
+
+# Nuxt.JS build output
+.nitro/
+.nuxt/
+.output/
+
+# Nuxt generate
+dist/
+
+# Yarn
+
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+node_modules/
+
+
+# macOS
+.DS_Store
+
+# dotenv environment variables file
+.env
+
+# ESLint cache file
+.eslintcache
+
+# Logs
+*.log*
+
+# Stylelint cache file
+.stylelintcache
+
+# Vim swap files
+*.swp
+
+# Generated service worker
+static/sw.js
+
+.vercel
+
+.lighthouseci

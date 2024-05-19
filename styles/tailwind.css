@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* verry usefull, if you have a shared style, use this */
+@layer components {
+  .row {
+    @apply flex flex-row items-center;
+  }
+
+  .link {
+    @apply text-primary underline;
+  }
+}
