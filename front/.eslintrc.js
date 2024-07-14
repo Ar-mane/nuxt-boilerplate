@@ -87,7 +87,7 @@ module.exports = {
     'vue/component-api-style': ['error', ['script-setup']],
     'vue/define-macros-order': 'error',
     'vue/define-props-declaration': ['error', 'type-based'],
-    'vue/multi-word-component-names': 0, // ????? Obviously we want multiple words?
+    'vue/multi-word-component-names': 0, // Disable rule: allow single-word component names
     'vue/no-required-prop-with-default': 'error',
     'vue/no-reserved-component-names': 0,
     'vue/no-v-for-template-key': 0, // This rule is for Vue 2
