@@ -1,0 +1,30 @@
+{
+  "ci": {
+    "collect": {
+      "url": [
+        "https://www.maisonsduvoyage.com",
+        "https://develop-lmdv-front.vercel.app",
+        "https://front-lmdv.vercel.app",
+        "https://www.maisonsduvoyage.com/asie/chine",
+        "https://develop-lmdv-front.vercel.app/asie/chine",
+        "https://front-lmdv.vercel.app/asie/chine",
+        "https://www.maisonsduvoyage.com/oceanie/polynesie-francaise/tahiti/voyage-sur-mesure/au-coeur-de-la-polynesie-en-pension-de-famille",
+        "https://develop-lmdv-front.vercel.app/oceanie/polynesie-francaise/voyage-sur-mesure/au-coeur-de-la-polynesie-en-pensions-de-famille",
+        "https://front-lmdv.vercel.app/oceanie/polynesie-francaise/voyage-sur-mesure/au-coeur-de-la-polynesie-en-pensions-de-famille"
+      ],
+      "numberOfRuns": 3,
+      "settings": {
+        "extraHeaders": "{\"Authorization\": \"Basic user:pass coming from runtine\"}",
+        "chromeFlags": "--no-sandbox --disable-dev-shm-usage",
+        "onlyCategories": ["performance"]
+      }
+    },
+    "settings": {
+      "disableStorageReset": true
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci"
+    }
+  }
+}

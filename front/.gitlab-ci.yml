@@ -1,0 +1,130 @@
+image: node:18.16.1
+
+stages:
+  - build
+  - test
+  - deploy-development
+  - deploy-prod
+  - scheduled
+
+variables:
+  NODE_ENV: production
+
+.push:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+
+.main_or_develop_push:
+  rules:
+    - !reference [.push, rules]
+    - if: $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH == "main"
+
+.mr:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH == "main"
+      when: never
+    - if: $CI_MERGE_REQUEST_ID
+
+.build:
+  stage: build
+  environment:
+    name: development
+  artifacts:
+    untracked: true
+  interruptible: true
+  before_script:
+    - yarn install --immutable
+  script:
+    - yarn build
+
+.test:
+  stage: test
+  interruptible: true
+  script:
+    - yarn lint
+    - yarn nuxi prepare
+    - yarn tsc
+    - yarn vue-tsc
+    - ./compare_errors.sh
+
+build:mr:
+  extends: .build
+  rules:
+    - !reference [.mr, rules]
+
+build:branch:
+  extends: .build
+  rules:
+    - !reference [.main_or_develop_push, rules]
+
+test:mr:
+  extends: .test
+  dependencies:
+    - build:mr
+  rules:
+    - !reference [.mr, rules]
+
+test:branch:
+  extends: .test
+  dependencies:
+    - build:branch
+  rules:
+    - !reference [.main_or_develop_push, rules]
+
+deploy-development:
+  stage: deploy-development
+  environment:
+    name: development
+  rules:
+    - !reference [.push, rules]
+    - if: $CI_COMMIT_BRANCH == "develop"
+  script:
+    - rm -rf .vercel
+    - npm install --global vercel
+    - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+    - vercel build --token=$VERCEL_TOKEN
+    - url="$(vercel deploy --prebuilt --token=$VERCEL_TOKEN)"
+    - vercel alias --token=$VERCEL_TOKEN set "$url" develop-lmdv-front.vercel.app
+
+deploy-prod:
+  stage: deploy-prod
+  environment:
+    name: production
+  rules:
+    - !reference [.push, rules]
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - rm -rf .vercel
+    - npm install --global vercel
+    - vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+    - vercel build --prod --token=$VERCEL_TOKEN
+    - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+
+monitoring_lighthouse:
+  stage: scheduled
+  image: cypress/browsers:node-18.16.1-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: always
+      allow_failure: true
+  timeout: 2h
+
+  before_script:
+    - npm install -g @lhci/cli@0.12.0
+    - npm install -g puppeteer
+    - npm install --no-package-lock --no-save --legacy-peer-deps google-spreadsheet google-auth-library
+
+  script:
+    # Mobile
+    # Override default `mobileSlow4G` applied configuration from https://github.com/GoogleChrome/lighthouse/blob/main/core/config/constants.js
+    - lhci autorun --throttling.cpuSlowdownMultiplier=1 --collect.settings.extraHeaders="{\"Authorization\":\"Basic $TEST_ENV_BASIC_AUTH\"}" || exit_code=$?
+    - node lighthouse_export.js
+    # Desktop
+    - lhci autorun --collect.settings.extraHeaders="{\"Authorization\":\"Basic $TEST_ENV_BASIC_AUTH\"}" --collect.settings.preset="desktop" || exit_code=$?
+    - node lighthouse_export.js
+    - if [ $exit_code -ne 0 ]; then return $exit_code; fi;
+  artifacts:
+    paths:
+      - .lighthouseci/*
+    expire_in: 1 week
