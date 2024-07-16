@@ -4,11 +4,10 @@
   --breakpoint-value-mobile: #{breakpoints.$mobile};
 
   font-size: 1rem;
-  line-height: 1.5;
-
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
+  line-height: 1.5;
 }
 
 strong {

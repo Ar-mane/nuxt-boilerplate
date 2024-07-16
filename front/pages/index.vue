@@ -22,7 +22,7 @@ useHead({
 </script>
 
 <style lang="scss" scoped>
-@use '$/breakpoints.scss';
+@use '$/breakpoints';
 
 #home {
   .header {
